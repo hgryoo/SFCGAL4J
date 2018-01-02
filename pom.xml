@@ -1,0 +1,139 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>edu.pnu.stem</groupId>
+	<artifactId>sfcgal4j</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<!-- =========================================================== -->
+	<!-- Developers and Contributors -->
+	<!-- =========================================================== -->
+	<developers>
+		<developer>
+			<id>hgryoo</id>
+			<name>Hyung-Gyu Ryoo</name>
+			<email>hyunggyu.ryoo@gmail.com</email>
+			<organization>Pusan National University</organization>
+			<roles>
+				<role>Module Maintainer</role>
+				<role>Java Developer</role>
+			</roles>
+		</developer>
+	</developers>
+
+	<!-- =========================================================== -->
+	<!-- Dependency Management -->
+	<!-- =========================================================== -->
+	<dependencies>
+		<dependency>
+			<groupId>org.bytedeco</groupId>
+			<artifactId>javacpp</artifactId>
+			<version>1.3.1</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.7.0</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.bytedeco</groupId>
+				<artifactId>javacpp</artifactId>
+				<configuration>
+					<properties>${javacpp.platform}</properties>
+					<propertyKeysAndValues>
+						<property>
+							<name>platform.root</name>
+							<value>${javacpp.platform.root}</value>
+						</property>
+						<property>
+							<name>platform.compiler</name>
+							<value>${javacpp.platform.compiler}</value>
+						</property>
+					</propertyKeysAndValues>
+					<classPath>${project.build.outputDirectory}</classPath>
+					<includePaths>
+						<includePath>${basedir}/native/</includePath>
+						<includePath>${basedir}/cppbuild/${javacpp.platform}/include/</includePath>
+						<includePath>/usr/local</includePath>
+					</includePaths>
+					<linkPath>${basedir}/cppbuild/${javacpp.platform}/lib/</linkPath>
+					<preloadPath>${basedir}/cppbuild/${javacpp.platform}/bin/</preloadPath>
+				</configuration>
+				<executions>
+					<execution>
+						<id>javacpp.parser</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>build</goal>
+						</goals>
+						<configuration>
+							<skip>${javacpp.parser.skip}</skip>
+							<outputDirectory>${project.build.outputDirectory}</outputDirectory>
+							<classOrPackageName>org.geotools.geometry.iso.sfcgal.wrapper.*</classOrPackageName>
+						</configuration>
+					</execution>
+					<execution>
+						<id>javacpp.compiler</id>
+						<phase>process-classes</phase>
+						<goals>
+							<goal>build</goal>
+						</goals>
+						<configuration>
+							<skip>${javacpp.compiler.skip}</skip>
+							<classOrPackageName>org.geotools.geometry.iso.sfcgal.wrapper.*</classOrPackageName>
+							<copyLibs>true</copyLibs>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+			</plugin>
+			
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<encoding>ISO-8859-1</encoding>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+			</plugin>
+			
+			<plugin>
+				<artifactId>maven-dependency-plugin</artifactId>
+			</plugin>
+			
+			<plugin>
+				<artifactId>maven-source-plugin</artifactId>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.2.1</version>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<argLine>-Djava.library.path=${project.build.outputDirectory}</argLine>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
