@@ -14,58 +14,45 @@
  *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  *    Lesser General Public License for more details.
  */
-package edu.pnu.stem.sfcgal.wrapper;
+package edu.pnu.stem.sfcgal4j;
 
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
-import org.bytedeco.javacpp.PointerPointer;
 import org.bytedeco.javacpp.annotation.ByRef;
 import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.javacpp.annotation.Name;
-import org.bytedeco.javacpp.annotation.Namespace;
 import org.bytedeco.javacpp.annotation.Platform;
+import org.bytedeco.javacpp.annotation.StdString;
 
 /**
- *
+ * @author Donguk Seo
  *
  */
-@Platform(include = "<vector>")
-@Namespace("std")
-@Name("vector<void*>")
-public class PointerVector extends Pointer {
+@Platform(include = "cpp/SFMultiPoint.h", link = "SFCGAL")
+public class SFMultiPoint extends SFGeometryCollection {
         static {
                 Loader.load();
         }
 
-        public PointerVector() {
+        public SFMultiPoint() {
                 allocate();
         }
 
-        public PointerVector(long n) {
-                allocate(n);
-        }
-
-        // (vector<void*>*)p
-        public PointerVector(Pointer p) {
+        public SFMultiPoint(Pointer p) {
                 super(p);
         }
 
-        // new std::vector<void*>()
         private native void allocate();
 
-        // new std::vector<void*>(n)
-        private native void allocate(long n);
-
         @Name("operator=")
-        public native @ByRef PointerVector copy(@ByRef PointerVector x);
+        public native @ByRef SFMultiPoint assign(@ByRef SFMultiPoint other);
 
-        public native long size();
+        public native SFMultiPoint clone();
 
-        public native @Cast("bool") boolean empty();
+        public native @StdString String geometryType();
 
-        @Name("operator[]")
-        public native @ByRef PointerPointer get(long n);
+        public native int geometryTypeId();
 
-        public native @ByRef PointerPointer at(long n);
+        public native @ByRef SFPoint pointN(@Cast("size_t") int n);
 
 }

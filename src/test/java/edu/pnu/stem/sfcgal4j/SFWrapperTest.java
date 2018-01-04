@@ -14,23 +14,23 @@
  *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  *    Lesser General Public License for more details.
  */
-package org.geotools.geometry.iso.sfcgal.util;
+package edu.pnu.stem.sfcgal4j;
 
 import java.util.ArrayList;
 
-import edu.pnu.stem.sfcgal.wrapper.SFCoordinate;
-import edu.pnu.stem.sfcgal.wrapper.SFEnvelope;
-import edu.pnu.stem.sfcgal.wrapper.SFGeometry;
-import edu.pnu.stem.sfcgal.wrapper.SFGeometryCollection;
-import edu.pnu.stem.sfcgal.wrapper.SFLineString;
-import edu.pnu.stem.sfcgal.wrapper.SFMultiPoint;
-import edu.pnu.stem.sfcgal.wrapper.SFPoint;
-import edu.pnu.stem.sfcgal.wrapper.SFPolygon;
-import edu.pnu.stem.sfcgal.wrapper.SFPolyhedralSurface;
-import edu.pnu.stem.sfcgal.wrapper.SFSolid;
-import edu.pnu.stem.sfcgal.wrapper.SFSurface;
-import edu.pnu.stem.sfcgal.wrapper.SFTriangle;
-import edu.pnu.stem.sfcgal.wrapper.SFTriangulatedSurface;
+import edu.pnu.stem.sfcgal4j.SFCoordinate;
+import edu.pnu.stem.sfcgal4j.SFEnvelope;
+import edu.pnu.stem.sfcgal4j.SFGeometry;
+import edu.pnu.stem.sfcgal4j.SFGeometryCollection;
+import edu.pnu.stem.sfcgal4j.SFLineString;
+import edu.pnu.stem.sfcgal4j.SFMultiPoint;
+import edu.pnu.stem.sfcgal4j.SFPoint;
+import edu.pnu.stem.sfcgal4j.SFPolygon;
+import edu.pnu.stem.sfcgal4j.SFPolyhedralSurface;
+import edu.pnu.stem.sfcgal4j.SFSolid;
+import edu.pnu.stem.sfcgal4j.SFSurface;
+import edu.pnu.stem.sfcgal4j.SFTriangle;
+import edu.pnu.stem.sfcgal4j.SFTriangulatedSurface;
 import junit.framework.TestCase;
 
 /**

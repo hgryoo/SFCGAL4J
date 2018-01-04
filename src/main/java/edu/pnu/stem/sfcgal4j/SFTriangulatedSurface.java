@@ -14,7 +14,7 @@
  *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  *    Lesser General Public License for more details.
  */
-package edu.pnu.stem.sfcgal.wrapper;
+package edu.pnu.stem.sfcgal4j;
 
 import java.util.ArrayList;
 
@@ -30,44 +30,38 @@ import org.bytedeco.javacpp.annotation.StdString;
  * @author Donguk Seo
  *
  */
-@Platform(include = "cpp/SFSolid.h", link = "SFCGAL")
-public class SFSolid extends SFGeometry {
+@Platform(include = "cpp/SFTriangulatedSurface.h", link = "SFCGAL")
+public class SFTriangulatedSurface extends SFSurface {
         static {
                 Loader.load();
         }
 
-        public SFSolid() {
+        public SFTriangulatedSurface() {
                 allocate();
         }
 
-        public SFSolid(ArrayList<SFPolyhedralSurface> shells) {
-                PointerVector vector = new PointerVector(shells.size());
+        public SFTriangulatedSurface(ArrayList<SFTriangle> triangle) {
+                PointerVector vector = new PointerVector(triangle.size());
 
-                for (int i = 0; i < shells.size(); i++) {
-                        vector.get(i).put(shells.get(i));
+                for (int i = 0; i < triangle.size(); i++) {
+                        vector.get(i).put(triangle.get(i));
                 }
 
                 allocate(vector);
         }
 
-        public SFSolid(Pointer p) {
+        public SFTriangulatedSurface(Pointer p) {
                 super(p);
-        }
-
-        public SFSolid(SFPolyhedralSurface exteriorShell) {
-                allocate(exteriorShell);
         }
 
         private native void allocate();
 
         private native void allocate(@ByRef PointerVector p);
 
-        private native void allocate(@ByRef SFPolyhedralSurface exteriorShell);
-
         @Name("operator=")
-        public native @ByRef SFSolid assign(@ByRef SFSolid tr);
+        public native @ByRef SFTriangulatedSurface assign(@ByRef SFTriangulatedSurface tr);
 
-        public native SFSolid clone();
+        public native SFTriangulatedSurface clone();
 
         public native @StdString String geometryType();
 
@@ -83,16 +77,18 @@ public class SFSolid extends SFGeometry {
 
         public native @Cast("bool") boolean isMeasured();
 
-        public native @ByRef SFPolyhedralSurface exteriorShell();
+        public native @Cast("size_t") int numTriangles();
 
-        public native @Cast("size_t") int numInteriorShells();
+        public native @ByRef SFTriangle triangleN(@Cast("size_t") int n);
 
-        public native @ByRef SFPolyhedralSurface interiorShellN(@Cast("size_t") int n);
+        public native void addTriangle(SFTriangle triangle);
 
-        public native void addInteriorShell(@ByRef SFPolyhedralSurface shell);
+        public native void addTriangles(@ByRef SFTriangulatedSurface other);
 
-        public native @Cast("size_t") int numShells();
+        public native @Cast("size_t") int numGeometries();
 
-        public native @ByRef SFPolyhedralSurface shellN(@Cast("size_t") int n);
+        public native @ByRef SFTriangle geometryN(@Cast("size_t") int n);
+
+        public native void reserve(@Cast("size_t") int n);
 
 }

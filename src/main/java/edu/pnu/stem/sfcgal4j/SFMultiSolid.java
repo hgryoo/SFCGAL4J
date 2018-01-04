@@ -14,12 +14,13 @@
  *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  *    Lesser General Public License for more details.
  */
-package edu.pnu.stem.sfcgal.wrapper;
+package edu.pnu.stem.sfcgal4j;
 
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.annotation.ByRef;
 import org.bytedeco.javacpp.annotation.Cast;
+import org.bytedeco.javacpp.annotation.Name;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.StdString;
 
@@ -27,44 +28,31 @@ import org.bytedeco.javacpp.annotation.StdString;
  * @author Donguk Seo
  *
  */
-@Platform(include = "cpp/SFPreparedGeometry.h", link = "SFCGAL")
-public class SFPreparedGeometry extends Pointer {
+@Platform(include = "cpp/SFMultiSolid.h", link = "SFCGAL")
+public class SFMultiSolid extends SFGeometryCollection {
         static {
                 Loader.load();
         }
 
-        public SFPreparedGeometry() {
+        public SFMultiSolid() {
                 allocate();
         }
 
-        public SFPreparedGeometry(SFGeometry g) {
-                this(g, 0);
-        }
-
-        public SFPreparedGeometry(SFGeometry g, long srid) {
-                allocate(g, srid);
+        public SFMultiSolid(Pointer p) {
+                super(p);
         }
 
         private native void allocate();
 
-        private native void allocate(@ByRef SFGeometry g, long srid);
+        @Name("operator=")
+        public native @ByRef SFMultiSolid assign(@ByRef SFMultiSolid other);
 
-        public native @ByRef SFGeometry geometry();
+        public native SFMultiSolid clone();
 
-        public native void resetGeometry(SFGeometry g);
+        public native @StdString String geometryType();
 
-        public native @ByRef @Cast("srid_t") long SRID();
+        public native int geometryTypeId();
 
-        public native void resetSRID(@Cast("srid_t") long srid);
-
-        public native @ByRef SFEnvelope envelope();
-
-        public native void invalidateCache();
-
-        public String asEWKT() {
-                return asEWKT(-1);
-        }
-
-        public native @StdString String asEWKT(int numDecimals);
+        public native @ByRef SFSolid solidN(@Cast("size_t") int n);
 
 }

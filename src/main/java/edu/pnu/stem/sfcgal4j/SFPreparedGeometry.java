@@ -14,13 +14,12 @@
  *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  *    Lesser General Public License for more details.
  */
-package edu.pnu.stem.sfcgal.wrapper;
+package edu.pnu.stem.sfcgal4j;
 
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.annotation.ByRef;
 import org.bytedeco.javacpp.annotation.Cast;
-import org.bytedeco.javacpp.annotation.Name;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.StdString;
 
@@ -28,31 +27,44 @@ import org.bytedeco.javacpp.annotation.StdString;
  * @author Donguk Seo
  *
  */
-@Platform(include = "cpp/SFMultiPolygon.h", link = "SFCGAL")
-public class SFMultiPolygon extends SFGeometryCollection {
+@Platform(include = "cpp/SFPreparedGeometry.h", link = "SFCGAL")
+public class SFPreparedGeometry extends Pointer {
         static {
                 Loader.load();
         }
 
-        public SFMultiPolygon() {
+        public SFPreparedGeometry() {
                 allocate();
         }
 
-        public SFMultiPolygon(Pointer p) {
-                super(p);
+        public SFPreparedGeometry(SFGeometry g) {
+                this(g, 0);
+        }
+
+        public SFPreparedGeometry(SFGeometry g, long srid) {
+                allocate(g, srid);
         }
 
         private native void allocate();
 
-        @Name("operator=")
-        public native @ByRef SFMultiPolygon assign(@ByRef SFMultiPolygon other);
+        private native void allocate(@ByRef SFGeometry g, long srid);
 
-        public native SFMultiPolygon clone();
+        public native @ByRef SFGeometry geometry();
 
-        public native @StdString String geometryType();
+        public native void resetGeometry(SFGeometry g);
 
-        public native int geometryTypeId();
+        public native @ByRef @Cast("srid_t") long SRID();
 
-        public native @ByRef SFPolygon polygonN(@Cast("size_t") int n);
+        public native void resetSRID(@Cast("srid_t") long srid);
+
+        public native @ByRef SFEnvelope envelope();
+
+        public native void invalidateCache();
+
+        public String asEWKT() {
+                return asEWKT(-1);
+        }
+
+        public native @StdString String asEWKT(int numDecimals);
 
 }

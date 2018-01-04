@@ -14,45 +14,58 @@
  *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  *    Lesser General Public License for more details.
  */
-package edu.pnu.stem.sfcgal.wrapper;
+package edu.pnu.stem.sfcgal4j;
 
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
+import org.bytedeco.javacpp.PointerPointer;
 import org.bytedeco.javacpp.annotation.ByRef;
 import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.javacpp.annotation.Name;
+import org.bytedeco.javacpp.annotation.Namespace;
 import org.bytedeco.javacpp.annotation.Platform;
-import org.bytedeco.javacpp.annotation.StdString;
 
 /**
- * @author Donguk Seo
+ *
  *
  */
-@Platform(include = "cpp/SFMultiLineString.h", link = "SFCGAL")
-public class SFMultiLineString extends SFGeometryCollection {
+@Platform(include = "<vector>")
+@Namespace("std")
+@Name("vector<void*>")
+public class PointerVector extends Pointer {
         static {
                 Loader.load();
         }
 
-        public SFMultiLineString() {
+        public PointerVector() {
                 allocate();
         }
 
-        public SFMultiLineString(Pointer p) {
+        public PointerVector(long n) {
+                allocate(n);
+        }
+
+        // (vector<void*>*)p
+        public PointerVector(Pointer p) {
                 super(p);
         }
 
+        // new std::vector<void*>()
         private native void allocate();
 
+        // new std::vector<void*>(n)
+        private native void allocate(long n);
+
         @Name("operator=")
-        public native @ByRef SFMultiLineString assign(@ByRef SFMultiLineString other);
+        public native @ByRef PointerVector copy(@ByRef PointerVector x);
 
-        public native SFMultiLineString clone();
+        public native long size();
 
-        public native @StdString String geometryType();
+        public native @Cast("bool") boolean empty();
 
-        public native int geometryTypeId();
+        @Name("operator[]")
+        public native @ByRef PointerPointer get(long n);
 
-        public native @ByRef SFLineString lineStringN(@Cast("size_t") int n);
+        public native @ByRef PointerPointer at(long n);
 
 }

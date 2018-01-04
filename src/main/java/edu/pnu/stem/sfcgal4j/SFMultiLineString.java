@@ -14,7 +14,7 @@
  *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  *    Lesser General Public License for more details.
  */
-package edu.pnu.stem.sfcgal.wrapper;
+package edu.pnu.stem.sfcgal4j;
 
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
@@ -28,31 +28,31 @@ import org.bytedeco.javacpp.annotation.StdString;
  * @author Donguk Seo
  *
  */
-@Platform(include = "cpp/SFMultiSolid.h", link = "SFCGAL")
-public class SFMultiSolid extends SFGeometryCollection {
+@Platform(include = "cpp/SFMultiLineString.h", link = "SFCGAL")
+public class SFMultiLineString extends SFGeometryCollection {
         static {
                 Loader.load();
         }
 
-        public SFMultiSolid() {
+        public SFMultiLineString() {
                 allocate();
         }
 
-        public SFMultiSolid(Pointer p) {
+        public SFMultiLineString(Pointer p) {
                 super(p);
         }
 
         private native void allocate();
 
         @Name("operator=")
-        public native @ByRef SFMultiSolid assign(@ByRef SFMultiSolid other);
+        public native @ByRef SFMultiLineString assign(@ByRef SFMultiLineString other);
 
-        public native SFMultiSolid clone();
+        public native SFMultiLineString clone();
 
         public native @StdString String geometryType();
 
         public native int geometryTypeId();
 
-        public native @ByRef SFSolid solidN(@Cast("size_t") int n);
+        public native @ByRef SFLineString lineStringN(@Cast("size_t") int n);
 
 }

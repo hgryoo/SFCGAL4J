@@ -14,7 +14,7 @@
  *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  *    Lesser General Public License for more details.
  */
-package edu.pnu.stem.sfcgal.wrapper;
+package edu.pnu.stem.sfcgal4j;
 
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
@@ -28,32 +28,50 @@ import org.bytedeco.javacpp.annotation.StdString;
  * @author Donguk Seo
  *
  */
-@Platform(include = { "cpp/SFTriangle.h", "cpp/SFTriangle.cpp" }, link = "SFCGAL")
-public class SFTriangle extends SFSurface {
+@Platform(include = "cpp/SFPoint.h", link = "SFCGAL")
+public class SFPoint extends SFGeometry {
         static {
                 Loader.load();
         }
 
-        public SFTriangle() {
+        public SFPoint() {
                 allocate();
         }
 
-        public SFTriangle(SFPoint p, SFPoint q, SFPoint r) {
-                allocate(p, q, r);
+        public SFPoint(@ByRef SFCoordinate c) {
+                allocate(c);
         }
 
-        public SFTriangle(Pointer p) {
+        public SFPoint(double x, double y) {
+                allocate(x, y);
+        }
+
+        public SFPoint(double x, double y, double z) {
+                allocate(x, y, z);
+        }
+
+        public SFPoint(double x, double y, double z, double m) {
+                allocate(x, y, z, m);
+        }
+
+        public SFPoint(Pointer p) {
                 super(p);
         }
 
         private native void allocate();
 
-        private native void allocate(@ByRef SFPoint p, @ByRef SFPoint q, @ByRef SFPoint r);
+        private native void allocate(@ByRef SFCoordinate c);
+
+        private native void allocate(double x, double y, double z);
+
+        private native void allocate(double x, double y);
+
+        private native void allocate(double x, double y, double z, double m);
 
         @Name("operator=")
-        public native @ByRef SFTriangle assign(@ByRef SFTriangle tr);
+        public native @ByRef SFPoint assign(@ByRef SFPoint c);
 
-        public native SFTriangle clone();
+        public native SFPoint clone();
 
         public native @StdString String geometryType();
 
@@ -69,10 +87,25 @@ public class SFTriangle extends SFSurface {
 
         public native @Cast("bool") boolean isMeasured();
 
-        public native void reverse();
+        public native double x();
 
-        public native @ByRef SFPolygon toPolygon();
+        public native double y();
 
-        public native @ByRef SFPoint vertex(int i);
+        public native double z();
+
+        public native double m();
+
+        public native void setM(double m);
+
+        @Name("operator<")
+        public native @Cast("bool") boolean isSmallerThan(@ByRef SFPoint p);
+
+        @Name("operator==")
+        public native @Cast("bool") boolean equals(@ByRef SFPoint p);
+
+        @Name("operator!=")
+        public native @Cast("bool") boolean notEquals(@ByRef SFPoint p);
+
+        public native @ByRef SFCoordinate coordinate();
 
 }

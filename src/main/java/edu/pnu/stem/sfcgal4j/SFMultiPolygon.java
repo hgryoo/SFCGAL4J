@@ -14,32 +14,45 @@
  *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  *    Lesser General Public License for more details.
  */
-package edu.pnu.stem.sfcgal.wrapper;
+package edu.pnu.stem.sfcgal4j;
 
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
+import org.bytedeco.javacpp.annotation.ByRef;
+import org.bytedeco.javacpp.annotation.Cast;
+import org.bytedeco.javacpp.annotation.Name;
 import org.bytedeco.javacpp.annotation.Platform;
+import org.bytedeco.javacpp.annotation.StdString;
 
 /**
  * @author Donguk Seo
  *
  */
-@Platform(include = "cpp/SFSurface.h", link = "SFCGAL")
-public class SFSurface extends SFGeometry {
+@Platform(include = "cpp/SFMultiPolygon.h", link = "SFCGAL")
+public class SFMultiPolygon extends SFGeometryCollection {
         static {
                 Loader.load();
         }
 
-        public SFSurface() {
+        public SFMultiPolygon() {
                 allocate();
         }
 
-        public SFSurface(Pointer p) {
+        public SFMultiPolygon(Pointer p) {
                 super(p);
         }
 
         private native void allocate();
 
-        public native int dimension();
+        @Name("operator=")
+        public native @ByRef SFMultiPolygon assign(@ByRef SFMultiPolygon other);
+
+        public native SFMultiPolygon clone();
+
+        public native @StdString String geometryType();
+
+        public native int geometryTypeId();
+
+        public native @ByRef SFPolygon polygonN(@Cast("size_t") int n);
 
 }
