@@ -1,11 +1,4 @@
 #!/bin/bash
-# This file is meant to be included by the parent cppbuild.sh script
-#if [[ -z "$PLATFORM" ]]; then
-#    pushd ..
-#    bash cppbuild.sh "$@" sfcgal-iso
-#    popd
-#    exit
-#fi
 set -eu
 
 which cmake3 &> /dev/null && CMAKE3="cmake3" || CMAKE3="cmake"
@@ -49,6 +42,18 @@ esac
 PLATFORM=$OS-$ARCH
 echo "Detected platform \"$PLATFORM\""
 
+while [[ $# > 0 ]]; do
+    case "$1" in
+        install)
+            OPERATION=install
+            ;;
+        clean)
+            OPERATION=clean
+            ;;
+    esac
+    shift
+done
+
 mkdir -p cppbuild
 cd cppbuild
 TOP_PATH=`pwd`
@@ -78,50 +83,70 @@ function download {
 		exit 1
         fi
     fi
-    ln -sf "$TOP_PATH/downloads/$2" "$2"
+    #ln -sf "$TOP_PATH/downloads/$2" "$2"
 }
 
-download https://sourceforge.net/projects/boost/files/boost/1.63.0/boost_1_63_0.tar.gz/download boost-1.63.tar.gz
-download https://github.com/CGAL/cgal/releases/download/releases%2FCGAL-4.7/CGAL-4.7.tar.gz CGAL-4.7.tar.gz
-download https://github.com/Oslandia/SFCGAL/archive/v1.3.0.tar.gz SFCGAL-1.3.0.tar.gz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
-mkdir -p include lib bin
 
-tar -xzf ../boost-1.63.tar.gz
-tar -xzf ../CGAL-4.7.tar.gz
-tar -xzf ../SFCGAL-1.3.0.tar.gz
-
-case $PLATFORM in
-    linux-x86_64)
-
-    	  # building boost
-    	  cd boost_1_63_0
-        ./bootstrap.sh "--with-libraries=filesystem,system,thread,date_time,serialization"
-        ./b2 install
-        cd ../
-
-        # building cgal
-        cd CGAL-4.7
-        cmake .
-        make
-        make install
-        cd ../
-
-        # building sfcgal
-        cd SFCGAL-1.3.0
-        cmake .
-        make
-        make install
-        cd ../
-
-        ;;
-    *)
-        echo "Error: Platform \"$PLATFORM\" is not supported"
-        ;;
-esac
-
-cd ../..
+if [[ -e $INSTALL_PATH/lib/libSFCGAL.so ]]; then
+	echo "SFCGAL is already installed"
+else
+	case $OPERATION in
+	    install)
+			download https://sourceforge.net/projects/boost/files/boost/1.63.0/boost_1_63_0.tar.gz/download boost-1.63.tar.gz
+			download https://github.com/CGAL/cgal/releases/download/releases%2FCGAL-4.10.1/CGAL-4.10.1.tar.xz CGAL-4.10.1.tar.xz
+			download https://github.com/Oslandia/SFCGAL/archive/v1.3.2.tar.gz SFCGAL-1.3.2.tar.gz
+			
+			#download https://gmplib.org/download/gmp/gmp-6.1.2.tar.xz gmp-6.1.2.tar.xz
+			#download http://www.mpfr.org/mpfr-current/mpfr-4.0.0.tar.xz mpfr-4.0.0.tar.xz
+			
+			mkdir -p include lib bin
+			
+			tar -xzf ../downloads/boost-1.63.tar.gz
+			tar -xf ../downloads/CGAL-4.10.1.tar.xz
+			tar -xzf ../downloads/SFCGAL-1.3.2.tar.gz
+	
+			case $PLATFORM in
+			    linux-x86_64)
+			    	 # building boost
+			    	 cd boost_1_63_0
+			        ./bootstrap.sh "--prefix=$INSTALL_PATH" --with-libraries=filesystem,system,thread,date_time,serialization
+			        ./b2 -d0 install "--prefix=$INSTALL_PATH" link=shared "address-model=64" "toolset=gcc"
+			        cd ../
+					ln -sf libboost_thread.a lib/libboost_thread-mt.a
+			
+			        # building cgal
+			        cd CGAL-4.10.1
+			        cmake "-DCMAKE_INSTALL_PREFIX=$INSTALL_PATH" "-DBUILD_SHARED_LIBS=TRUE"
+			        make
+			        make install
+			        cd ../
+			
+			        # building sfcgal
+			        cd SFCGAL-1.3.2
+			        
+			        export CGAL_DIR="$INSTALL_PATH/CGAL-4.10.1"
+			        export CGAL_INCLUDE_DIRS="$INSTALL_PATH/CGAL-4.10.1/include"
+			        
+			        cmake "-DCMAKE_INSTALL_PREFIX=$INSTALL_PATH" "-DSFCGAL_USE_STATIC_LIBS=OFF"
+			        make
+			        make install
+			        cd ../
+			        ;;
+		    	*)
+			        echo "Error: Platform \"$PLATFORM\" is not supported"
+			        ;;
+				esac
+				
+				cd ../..
+		        ;;
+	    clean)
+	        echo "Cleaning \"$INSTALL_PATH\""
+	        rm -Rf $INSTALL_PATH/
+	        ;;
+	esac
+fi
 
