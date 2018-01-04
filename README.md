@@ -18,10 +18,11 @@ SFCGAL is distributed under the terms of the [LGPL](http://www.gnu.org/licenses/
 
 ## Building
 This project uses Apache Maven. To build this project run maven from the root of the repository.  
-    mvn clean install
-    
+```
+mvn clean install
+```
+
 ## Authors
 Hyung-Gyu Ryoo / Pusan National University (hgryoo@pnu.edu)
-Soojin Kim / Pusan National University (soojin.kim@pnu.edu)
 Donguk Seo / Pusan National University (donguk.seo@pnu.edu)
 
