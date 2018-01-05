@@ -2,6 +2,10 @@
 
 Java wrapper for [Simple Feature CGAL (SFCGAL)](http://sfcgal.org) which is a C++ wrapper library around [CGAL](http://www.cgal.org) with the aim of supporting ISO 19107:2013 and OGC Simple Features Access 1.2 for 3D operations. Since SFCGAL is C++ library, this module employs [JavaCPP](https://github.com/bytedeco/javacpp) as a bridge between C++ and Java. Due to dependency on SFCGAL, there exist limitations such as supported platforms. If you need 3D operations in gt-geometry, you have to install [SFCGAL](http://sfcgal.org) manually.
 
+## Documentation
+  * User Guide - unavailable now
+  * [Java Doc](https://hgryoo.github.io/SFCGAL4J/apidocs/)
+
 ## Supported platform
   * GNU/Linux
 
