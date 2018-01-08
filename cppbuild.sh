@@ -91,7 +91,7 @@ mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
 
-if [[ -e $INSTALL_PATH/lib/libSFCGAL.so ]]; then
+if [[ -e $INSTALL_PATH/lib/libSFCGAL.a ]]; then
 	echo "SFCGAL is already installed"
 else
 	case $OPERATION in
@@ -113,11 +113,18 @@ else
 			    linux-x86_64)
 			    	 # building boost
 			    	 cd boost_1_63_0
-			        ./bootstrap.sh "--prefix=$INSTALL_PATH" --with-libraries=filesystem,system,thread,date_time,serialization
-			        ./b2 -d0 install "--prefix=$INSTALL_PATH" link=shared "address-model=64" "toolset=gcc"
+			        ./bootstrap.sh "--prefix=$INSTALL_PATH" --with-libraries=filesystem,system,thread,date_time,serialization,
+			        ./b2 -d0 install "--prefix=$INSTALL_PATH" link=static,shared "address-model=64" "toolset=gcc"
 			        cd ../
-					ln -sf libboost_thread.a lib/libboost_thread-mt.a
-			
+
+				ln -sf libboost_thread.a lib/libboost_thread-mt.a
+				ln -sf libboost_thread.so lib/libboost_thread-mt.so
+				
+				export BOOST_ROOT="$INSTALL_PATH/boost_1_63_0"		
+				export BOOST_INCLUDEDIR="$INSTALL_PATH/include/boost"
+				export BOOST_LIBRARYDDIR="$INSTALL_PATH/lib/"
+				export BOOST_THREAD_LIBRARY_RELEASE="$INSTALL_PATH/lib/libboost_thread.so"
+	
 			        # building cgal
 			        cd CGAL-4.10.1
 			        cmake "-DCMAKE_INSTALL_PREFIX=$INSTALL_PATH" "-DBUILD_SHARED_LIBS=TRUE"
@@ -131,7 +138,7 @@ else
 			        export CGAL_DIR="$INSTALL_PATH/CGAL-4.10.1"
 			        export CGAL_INCLUDE_DIRS="$INSTALL_PATH/CGAL-4.10.1/include"
 			        
-			        cmake "-DCMAKE_INSTALL_PREFIX=$INSTALL_PATH" "-DSFCGAL_USE_STATIC_LIBS=OFF"
+			        cmake "-DCMAKE_INSTALL_PREFIX=$INSTALL_PATH" "-DSFCGAL_USE_STATIC_LIBS=FALSE"
 			        make
 			        make install
 			        cd ../
