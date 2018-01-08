@@ -14,6 +14,7 @@
 	</licenses>
 
 	<properties>
+		<maven.test.skip>false</maven.test.skip>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<javacpp.cppbuild.skip>false</javacpp.cppbuild.skip> <!-- To skip execution of cppbuild.sh: -Djavacpp.cppbuild.skip=true -->
 		<javacpp.parser.skip>false</javacpp.parser.skip>     <!-- To skip header file parsing phase: -Djavacpp.parser.skip=true -->
@@ -102,6 +103,10 @@
 					</includePaths>
 					<linkPath>${basedir}/cppbuild/${javacpp.platform}/lib/</linkPath>
 					<preloadPath>${basedir}/cppbuild/${javacpp.platform}/bin/</preloadPath>
+					<resourcePaths>
+						    <resourcePath>${basedir}/cppbuild/${javacpp.platform}/</resourcePath>
+						    <resourcePath>${basedir}/target/classes/edu/pnu/stem/sfcgal4j/</resourcePath>
+					</resourcePaths>
 				</configuration>
 				<executions>
 					<execution>
@@ -178,21 +183,30 @@
 			<plugin>
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>3.0.2</version>
-				<!-- <executions>
+				 <executions>
 					<execution>
-						<id>default-jar</id>
-						<configuration>
-							<archive>
-								<manifestEntries>
-									<Class-Path>${javacpp.moduleId}.jar
-										${javacpp.moduleId}-linux-x86.jar
-										${javacpp.moduleId}-linux-x86_64.jar
-									</Class-Path>
-								</manifestEntries>
-							</archive>
-						</configuration>
+					    <id>default-jar</id>
+					    <phase>package</phase>
+					    <goals>
+					      <goal>jar</goal>
+					    </goals>
 					</execution>
-				</executions> -->
+					<execution>
+					    <id>${javacpp.platform}${javacpp.platform.extension}</id>
+					    <phase>package</phase>
+					    <goals>
+					      <goal>jar</goal>
+					    </goals>
+					    <configuration>
+					      <classifier>${javacpp.platform}</classifier>
+					      <skipIfEmpty>true</skipIfEmpty>
+					      <includes>
+						<include>${javacpp.platform.library.path}/</include>
+						<include>org/bytedeco/javacpp/${javacpp.platform}/</include>
+					      </includes>
+					    </configuration>
+					  </execution>
+				</executions>
 			</plugin>
 
 			<plugin>
@@ -213,6 +227,10 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<forkMode>once</forkMode>
+					<argLine>-Djava.library.path=${project.build.outputDirectory}/edu/pnu/stem/sfcgal4j/${javacpp.platform}/</argLine>
+				</configuration>
 			</plugin>
 			<plugin>
 		        <artifactId>maven-javadoc-plugin</artifactId>
