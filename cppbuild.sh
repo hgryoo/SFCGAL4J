@@ -117,13 +117,13 @@ else
 			        ./b2 -d0 install "--prefix=$INSTALL_PATH" link=static,shared "address-model=64" "toolset=gcc"
 			        cd ../
 
-				ln -sf libboost_thread.a lib/libboost_thread-mt.a
-				ln -sf libboost_thread.so lib/libboost_thread-mt.so
-				
-				export BOOST_ROOT="$INSTALL_PATH/boost_1_63_0"		
-				export BOOST_INCLUDEDIR="$INSTALL_PATH/include/boost"
-				export BOOST_LIBRARYDDIR="$INSTALL_PATH/lib/"
-				export BOOST_THREAD_LIBRARY_RELEASE="$INSTALL_PATH/lib/libboost_thread.so"
+					ln -sf libboost_thread.a lib/libboost_thread-mt.a
+					ln -sf libboost_thread.so lib/libboost_thread-mt.so
+					
+					export BOOST_ROOT="$INSTALL_PATH/boost_1_63_0"		
+					export BOOST_INCLUDEDIR="$INSTALL_PATH/include/boost"
+					export BOOST_LIBRARYDDIR="$INSTALL_PATH/lib/"
+					export BOOST_THREAD_LIBRARY_RELEASE="$INSTALL_PATH/lib/libboost_thread.so"
 	
 			        # building cgal
 			        cd CGAL-4.10.1
@@ -145,18 +145,18 @@ else
 			    ;;
 			        
 			    windows-x86_64)
-			    	download https://sourceforge.net/projects/boost/files/boost/1.63.0/boost_1_63_0.tar.gz/download boost-1.63.tar.gz
-					download https://github.com/CGAL/cgal/releases/download/releases%2FCGAL-4.10.1/CGAL-4.10.1.tar.xz CGAL-4.10.1.tar.xz
-					download https://github.com/Oslandia/SFCGAL/archive/v1.3.2.tar.gz SFCGAL-1.3.2.tar.gz
+			    	#download https://sourceforge.net/projects/boost/files/boost/1.63.0/boost_1_63_0.tar.gz/download boost-1.63.tar.gz
+					#download https://github.com/CGAL/cgal/releases/download/releases%2FCGAL-4.10.1/CGAL-4.10.1.tar.xz CGAL-4.10.1.tar.xz
+					#download https://github.com/Oslandia/SFCGAL/archive/v1.3.2.tar.gz SFCGAL-1.3.2.tar.gz
 			
-					echo "Decompressing boost-1.63.tar.gz"
-					tar -xzf ../downloads/boost-1.63.tar.gz
+					#echo "Decompressing boost-1.63.tar.gz"
+					#tar -xzf ../downloads/boost-1.63.tar.gz
 					
-					echo "Decompressing CGAL-4.10.1.tar.xz"
-					tar -xJf ../downloads/CGAL-4.10.1.tar.xz
+					#echo "Decompressing CGAL-4.10.1.tar.xz"
+					#tar -xJf ../downloads/CGAL-4.10.1.tar.xz
 					
-					echo "Decompressing SFCGAL-1.3.2.tar.gz"
-					tar -xzf ../downloads/SFCGAL-1.3.2.tar.gz
+					#echo "Decompressing SFCGAL-1.3.2.tar.gz"
+					#tar -xzf ../downloads/SFCGAL-1.3.2.tar.gz
 					
 			    	#download https://sourceforge.net/projects/boost/files/boost/1.63.0/boost_1_63_0.zip/download boost-1.63.zip
 			    	#download https://github.com/CGAL/cgal/releases/download/releases%2FCGAL-4.10.1/CGAL-4.10.1.zip CGAL-4.10.1.zip
@@ -183,42 +183,50 @@ else
 			        #./b2 "--prefix=$INSTALL_PATH" link=static,shared "address-model=64" "toolset=gcc" install
 			        
 			        #export BOOST_BUILD_PATH="$INSTALL_PATH/boost_1_63_0/boost_build/bin"
-			        cd ../
+			        #cd ../
 			        #cd ../../
 			        #$INSTALL_PATH/boost_1_63_0/boost_build/bin/b2 "--prefix=$INSTALL_PATH" link=shared "address-model=64" "toolset=gcc" install
 			        #cd ../../../
 					#cd ../
 					#ln -sf libboost_thread.a lib/libboost_thread-mt.a
 					
-					cd boost_1_63_0/tools/build
-					./bootstrap.bat
-					./bootstrap.bat mingw
-					./b2.exe install toolset=gcc "--prefix=$INSTALL_PATH/boost_1_63_0/boost_build"
-					cd ../../
+					cd boost_1_63_0/
+			        ./bootstrap.bat g++
+			        ./b2 clean
+					./b2 -j4 -a --toolset=g++ "--prefix=$INSTALL_PATH" variant=release link=shared threading=multi address-model=64
+			        cd ../
+
+					ln -sf libboost_thread-mgw72-mt-1_63.dll lib/libboost_thread-mt.dll
 					
-					$INSTALL_PATH/boost_1_63_0/boost_build/bin/b2 toolset=gcc --build-type=complete stage "--prefix=$INSTALL_PATH" link=shared "address-model=64" "toolset=gcc" install
-					
-					cd ../
-					
-					export BOOST_INCLUDE_DIRS="$INSTALL_PATH/include/boost-1_63"
-			        export Boost_LIBRARIES="$INSTALL_PATH/lib"
+					export BOOST_ROOT="$INSTALL_PATH/boost_1_63_0"		
+					export BOOST_INCLUDEDIR="$INSTALL_PATH/include/boost"
+					export BOOST_LIBRARYDDIR="$INSTALL_PATH/lib/"
+					export BOOST_THREAD_LIBRARY_RELEASE="$INSTALL_PATH/lib/libboost_thread-mgw72-mt-1_63.dll"
+			        
+			        export GMP_DIR="$INSTALL_PATH/CGAL-4.10.1/auxiliary/gmp/"
+			        export GMP_INC_DIR="$INSTALL_PATH/CGAL-4.10.1/auxiliary/gmp/include"
+			        export GMP_LIB_DIR="$INSTALL_PATH/CGAL-4.10.1/auxiliary/gmp/lib"
+			        
+			        export MPFR_INC_DIR="$INSTALL_PATH/CGAL-4.10.1/auxiliary/gmp/include"
+			        export MPFR_LIB_DIR="$INSTALL_PATH/CGAL-4.10.1/auxiliary/gmp/lib"
+			        
+			        export CMAKE_CXX_COMPILER=g++;
+			        export CMAKE_C_COMPILER=gcc;
 			        
 			        # building cgal
-			        cd CGAL-4.10.1
-			        cmake "-DCMAKE_INSTALL_PREFIX=$INSTALL_PATH" "-DBUILD_SHARED_LIBS=TRUE"
-			        make
-			        make install
+			        cd CGAL-4.10.1/
+			        cmake -G"MinGW Makefiles" "-DCMAKE_INSTALL_PREFIX=$INSTALL_PATH" "-DBUILD_SHARED_LIBS=TRUE"
+			        mingw32-make
 			        cd ../
 			        
 			        # building sfcgal
-			        cd SFCGAL-1.3.2
+			        cd SFCGAL-1.3.2/
 			        
 			        export CGAL_DIR="$INSTALL_PATH/CGAL-4.10.1"
 			        export CGAL_INCLUDE_DIRS="$INSTALL_PATH/CGAL-4.10.1/include"
 			        
-			        cmake "-DCMAKE_INSTALL_PREFIX=$INSTALL_PATH" "-DSFCGAL_USE_STATIC_LIBS=OFF"
-			        make
-			        make install
+			        cmake -G "MinGW Makefiles" "-DCMAKE_INSTALL_PREFIX=$INSTALL_PATH" "-DSFCGAL_USE_STATIC_LIBS=OFF"
+			        mingw32-make
 			        cd ../
 			   	;;
 		    	*)
