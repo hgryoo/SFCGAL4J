@@ -202,7 +202,7 @@
 					      <skipIfEmpty>true</skipIfEmpty>
 					      <includes>
 						<include>${javacpp.platform.library.path}/</include>
-						<include>org/bytedeco/javacpp/${javacpp.platform}/</include>
+						<include>edu/pnu/stem/sfcgal4j/${javacpp.platform}/</include>
 					      </includes>
 					    </configuration>
 					  </execution>

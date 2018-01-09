@@ -91,7 +91,7 @@ mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
 
-if [[ -e $INSTALL_PATH/lib/libSFCGAL.a ]]; then
+if [[ -e $INSTALL_PATH/lib/libSFCGAL.so ]]; then
 	echo "SFCGAL is already installed"
 else
 	case $OPERATION in
