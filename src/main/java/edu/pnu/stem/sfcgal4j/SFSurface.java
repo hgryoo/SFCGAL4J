@@ -24,7 +24,7 @@ import org.bytedeco.javacpp.annotation.Platform;
  * @author Donguk Seo
  *
  */
-@Platform(include = "cpp/SFSurface.h", link = "SFCGAL")
+@Platform(include = "cpp/SFSurface.cpp", link = {"SFCGAL"})
 public class SFSurface extends SFGeometry {
         static {
                 Loader.load();

@@ -25,7 +25,7 @@ import org.bytedeco.javacpp.annotation.Platform;
  * @author Donguk Seo
  *
  */
-@Platform(include = "cpp/SFAlgorithm.h", link = "SFCGAL")
+@Platform(include = {"cpp/SFAlgorithm.cpp"}, link = {"SFCGAL"})
 public class SFAlgorithm {
         static {
                 Loader.load();

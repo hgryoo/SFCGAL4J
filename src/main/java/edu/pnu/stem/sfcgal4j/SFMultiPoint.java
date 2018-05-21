@@ -28,7 +28,7 @@ import org.bytedeco.javacpp.annotation.StdString;
  * @author Donguk Seo
  *
  */
-@Platform(include = "cpp/SFMultiPoint.h", link = "SFCGAL")
+@Platform(include = "cpp/SFMultiPoint.cpp", link = {"SFCGAL"})
 public class SFMultiPoint extends SFGeometryCollection {
         static {
                 Loader.load();

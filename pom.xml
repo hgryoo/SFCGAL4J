@@ -20,6 +20,8 @@
 		<javacpp.parser.skip>false</javacpp.parser.skip>     <!-- To skip header file parsing phase: -Djavacpp.parser.skip=true -->
 		<javacpp.compiler.skip>false</javacpp.compiler.skip> <!-- To skip native compilation phase: -Djavacpp.compiler.skip=true -->
 		<javacpp.moduleId>sfcgal4j</javacpp.moduleId>
+		<test.maxHeapSize>512M</test.maxHeapSize>
+		<jvm.opts>-XX:MaxMetaspaceSize=256M</jvm.opts>
 	</properties>
 
 	<!-- =========================================================== -->
@@ -51,13 +53,17 @@
 		<dependency>
 			<groupId>org.bytedeco</groupId>
 			<artifactId>javacpp</artifactId>
-			<version>1.3.3</version>
+			<version>1.4.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-surefire-plugin</artifactId>
+			<version>2.19.1</version>
 		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -66,79 +72,29 @@
 					<source>1.8</source>
 					<target>1.8</target>
 				</configuration>
-				<executions>
-					<execution>
-						<id>default-compile</id>
-						<configuration>
-							<includes>
-								<include>edu/pnu/stem/sfcgal4j/*.java</include>
-							</includes>
-						</configuration>
-					</execution>
-					<execution>
-						<id>javacpp.parser</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>compile</goal>
-						</goals>
-						<configuration>
-							<includes>
-								<include>edu/pnu/stem/sfcgal4j/*.java</include>
-							</includes>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 
 			<plugin>
 				<groupId>org.bytedeco</groupId>
 				<artifactId>javacpp</artifactId>
-				<version>1.3.3</version>
 				<configuration>
 					<properties>${javacpp.platform}</properties>
 					<classPath>${project.build.outputDirectory}</classPath>
 					<includePaths>
-						<includePath>${basedir}/native/</includePath>
+						<includePath>${basedir}/src/native/</includePath>
 						<includePath>${basedir}/cppbuild/${javacpp.platform}/include/</includePath>
 					</includePaths>
-					<linkPath>${basedir}/cppbuild/${javacpp.platform}/lib/</linkPath>
-					<preloadPath>${basedir}/cppbuild/${javacpp.platform}/bin/</preloadPath>
+					<linkPaths>
+						<linkPath>${basedir}/cppbuild/${javacpp.platform}/lib</linkPath>
+						<linkPath>${project.build.outputDirectory}/lib</linkPath>
+					</linkPaths>
+					<preloadPath>${basedir}/cppbuild/${javacpp.platform}/bin</preloadPath>
 					<resourcePaths>
-						    <resourcePath>${basedir}/cppbuild/${javacpp.platform}/</resourcePath>
-						    <resourcePath>${basedir}/target/classes/edu/pnu/stem/sfcgal4j/</resourcePath>
+						    <resourcePath>${basedir}/cppbuild/${javacpp.platform}</resourcePath>
+						    <resourcePath>${basedir}/target/classes/edu/pnu/stem/sfcgal4j</resourcePath>
 					</resourcePaths>
 				</configuration>
 				<executions>
-					<execution>
-						<id>javacpp.cppbuild.install</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>build</goal>
-						</goals>
-						<configuration>
-							<skip>${javacpp.cppbuild.skip}</skip>
-							<buildCommand>
-								<program>bash</program>
-								<argument>${project.basedir}/cppbuild.sh</argument>
-								<argument>install</argument>
-							</buildCommand>
-						</configuration>
-					</execution>
-					<execution>
-						<id>javacpp.cppbuild.clean</id>
-						<phase>clean</phase>
-						<goals>
-							<goal>build</goal>
-						</goals>
-						<configuration>
-							<skip>${javacpp.cppbuild.skip}</skip>
-							<buildCommand>
-								<program>bash</program>
-								<argument>${project.basedir}/cppbuild.sh</argument>
-								<argument>clean</argument>
-							</buildCommand>
-						</configuration>
-					</execution>
 					<execution>
 						<id>javacpp.parser</id>
 						<phase>generate-sources</phase>
@@ -148,7 +104,6 @@
 						<configuration>
 							<skip>${javacpp.parser.skip}</skip>
 							<classOrPackageName>edu.pnu.stem.sfcgal4j.*</classOrPackageName>
-							<copyLibs>true</copyLibs>
 						</configuration>
 					</execution>
 					<execution>
@@ -161,7 +116,27 @@
 							<skip>${javacpp.compiler.skip}</skip>
 							<classOrPackageName>edu.pnu.stem.sfcgal4j.*</classOrPackageName>
 							<copyLibs>true</copyLibs>
+							<copyResources>true</copyResources>
 						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.0.0</version>
+				<configuration>
+					<descriptors>
+						<descriptor>src/main/assembly/bin.xml</descriptor>
+						<descriptor>src/main/assembly/src.xml</descriptor>
+					</descriptors>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
 					</execution>
 				</executions>
 			</plugin>
@@ -202,7 +177,7 @@
 					      <skipIfEmpty>true</skipIfEmpty>
 					      <includes>
 						<include>${javacpp.platform.library.path}/</include>
-						<include>edu/pnu/stem/sfcgal4j/${javacpp.platform}/</include>
+						<include>${basedir}/edu/pnu/stem/sfcgal4j/${javacpp.platform}/</include>
 					      </includes>
 					    </configuration>
 					  </execution>
@@ -228,8 +203,15 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<forkMode>once</forkMode>
-					<argLine>-Djava.library.path=${project.build.outputDirectory}/edu/pnu/stem/sfcgal4j/${javacpp.platform}/</argLine>
+					<environmentVariables>
+						<LD_LIBRARY_PATH>${env.LD_LIBRARY_PATH}:${project.basedir}/cppbuild/${javacpp.platform}/lib:${project.build.outputDirectory}/lib</LD_LIBRARY_PATH>
+					</environmentVariables>
+					<runOrder>alphabetical</runOrder>
+					<includes>
+						<include>**/*Test.java</include>
+					</includes>
+					<argLine>-Xmx${test.maxHeapSize} ${jvm.opts}</argLine>
+					<forkCount>0</forkCount>
 				</configuration>
 			</plugin>
 			<plugin>

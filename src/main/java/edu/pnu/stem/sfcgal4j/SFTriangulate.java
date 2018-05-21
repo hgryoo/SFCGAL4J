@@ -24,7 +24,7 @@ import org.bytedeco.javacpp.annotation.Platform;
  * @author Donguk Seo
  *
  */
-@Platform(include = "cpp/SFTriangulate.h", link = "SFCGAL")
+@Platform(include = "cpp/SFTriangulate.cpp", link = {"SFCGAL"})
 public class SFTriangulate {
         static {
                 Loader.load();

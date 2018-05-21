@@ -27,7 +27,7 @@ import org.bytedeco.javacpp.annotation.Platform;
  * @author Donguk Seo
  *
  */
-@Platform(include = "cpp/SFCoordinate.h", link = "SFCGAL")
+@Platform(include = {"cpp/SFCoordinate.cpp"}, link = {"SFCGAL"})
 public class SFCoordinate extends Pointer {
         static {
                 Loader.load();
