@@ -129,7 +129,7 @@ case $OPERATION in
 
 				# building cgal
 				cd CGAL
-				cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_SHARED_LIBS=FALSE
+				cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_SHARED_LIBS=TRUE
 				make
 				make install
 				cd ../
@@ -141,7 +141,7 @@ case $OPERATION in
 				export CGAL_INCLUDE_DIRS="$INSTALL_PATH/include/"
 				export CGAL_LIBRARY_DIRS="$INSTALL_PATH/lib/"
 
-				cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DSFCGAL_USE_STATIC_LIBS=ON
+				cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DSFCGAL_WITH_OSG=ON
 
 				make
 				make install
