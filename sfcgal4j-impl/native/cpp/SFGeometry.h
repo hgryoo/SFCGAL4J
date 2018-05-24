@@ -1,27 +1,9 @@
-/*
- *    GeoTools - The Open Source Java GIS Toolkit
- *    http://geotools.org
- *
- *    (C) 2015, Open Source Geospatial Foundation (OSGeo)
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License as published by the Free Software Foundation;
- *    version 2.1 of the License.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- */
-
 /**
+ * @author Hyung-Gyu Ryoo (hyungyu.ryoo@gmail.com)
  * @author Donguk Seo
  *
  */
-
-#ifndef JAVACPP_SFCGAL_Geometry_H
-#define JAVACPP_SFCGAL_Geometry_H
+#pragma once
 
 #include <SFCGAL/Geometry.h>
 #include "SFEnvelope.h"
@@ -58,11 +40,11 @@ public:
 	//SFGeometry(const SFCGAL::Geometry& other) : data(&other){ }
 	//SFGeometry(const SFCGAL::Geometry* other) : data(other){ }
 	SFGeometry(SFCGAL::Geometry* other) : data(other){ }
-	
+
 	virtual ~SFGeometry() {
 		if(data != NULL) delete data;
 	}
-	
+
 	//--SFCGAL::Geometry
 	virtual SFGeometry* clone() const {
 		if(data == NULL) return NULL;
@@ -75,19 +57,19 @@ public:
 
 		return data->geometryType();
 	}
-	
+
 	virtual int geometryTypeId() const {
 		if(data == NULL) return -1;
 
 		return data->geometryTypeId();
 	}
-	
+
 	virtual int dimension() const {
 		if(data == NULL) return -1;
 
 		return data->dimension();
 	}
-	
+
 	virtual int coordinateDimension() const {
 		if(data == NULL) return -1;
 
@@ -96,7 +78,7 @@ public:
 
 	virtual bool isEmpty() const {
 		if(data == NULL) return false;
-		
+
 		return data->isEmpty();
 	}
 
@@ -106,7 +88,7 @@ public:
 
 		return data->is3D();
 	}
-	
+
 	virtual bool isMeasured() const {
 		if(data == NULL) return false;
 
@@ -122,7 +104,7 @@ public:
 	SFEnvelope& envelope() const {
 		return *(new SFEnvelope(data->envelope()));
 	}
-		
+
 	virtual SFGeometry& boundary() const {	//virtual std::auto_ptr<Geometry> boundary() const;
 		//if(data == NULL) return NULL;
 		std::auto_ptr<SFCGAL::Geometry> p = data->boundary();
@@ -155,7 +137,7 @@ public:
 
 		return data->numGeometries();
 	}
-	
+
 	virtual const SFGeometry& geometryN(size_t const& n) const {
 		return *(new SFGeometry(data->geometryN(n)));
 	}
@@ -172,13 +154,10 @@ public:
 	/*
 	virtual void accept(SFCGAL::GeometryVisitor& visitor) {
 		if(data == NULL) return;
-
 		data->accept(visitor);
 	}
-
 	virtual void accept(SFCGAL::ConstGeometryVisitor& visitor) {
 		if(data == NULL) return;
-
 		data->accept(visitor);
 	}
 	*/
@@ -187,5 +166,3 @@ public:
 		return ( *data == *(other.data) );
 	}
 };
-
-#endif

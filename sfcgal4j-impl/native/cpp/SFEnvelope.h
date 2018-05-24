@@ -1,27 +1,9 @@
-/*
- *    GeoTools - The Open Source Java GIS Toolkit
- *    http://geotools.org
- *
- *    (C) 2015, Open Source Geospatial Foundation (OSGeo)
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License as published by the Free Software Foundation;
- *    version 2.1 of the License.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- */
-
 /**
+ * @author Hyung-Gyu Ryoo (hyungyu.ryoo@gmail.com)
  * @author Donguk Seo
  *
  */
-
-#ifndef JAVACPP_SFCGAL_Envelope_H
-#define JAVACPP_SFCGAL_Envelope_H
+#pragma once
 
 #include <SFCGAL/Envelope.h>
 #include "SFCoordinate.h"
@@ -36,7 +18,7 @@ public:
 	typedef SFCGAL::Envelope cpp_base;
 	const cpp_base& get_data() const { return data; }
 	cpp_base& get_data() { return data; }
-	
+
 	SFEnvelope() : data() { }
 	SFEnvelope(
 		const double& xmin, const double& xmax,
@@ -51,15 +33,15 @@ public:
 	//SFEnvelope(const Kernel::Point3& other) : data(other) { }
 	SFEnvelope(const SFEnvelope& other) : data(other.data) { }
 	SFEnvelope(const SFCGAL::Envelope& other) : data(other) { }
-	
+
 	SFEnvelope& operator=(const SFEnvelope& other) {
 		data = other.data;
-		
+
 		return *this;
 	}
-	
+
 	~SFEnvelope() { }
-	
+
 
 	bool isEmpty() const {
 		return data.isEmpty();
@@ -115,9 +97,8 @@ public:
 	/*
 	LineString& toRing() const {
 		std::auto_ptr<SFCGAL::LineString> p = data.toRing();
-		
-		LineString *lineString = new LineString(p.release());
 
+		LineString *lineString = new LineString(p.release());
 		return *lineString;
 	}
 	*/
@@ -126,20 +107,16 @@ public:
 	/*
 	Polygon& toPolygon() const {
 		std::auto_ptr<SFCGAL::Polygon> p = data.toPolygon();
-
 		Polygon *polygon = new Polygon(p.release());
-
 		return *polygon;
 	}
 	*/
 
 	SFSolid& toSolid() const;
-	/*	
+	/*
 	Solid& toSolid() const {
 		std::auto_ptr<SFCGAL::Solid> p = data.toSolid();
-
 		Solid *solid = new Solid(p.release());
-
 		return *solid;
 	}
 	*/
@@ -148,5 +125,3 @@ public:
 		return (this->data == other.data);
 	}
 };
-
-#endif

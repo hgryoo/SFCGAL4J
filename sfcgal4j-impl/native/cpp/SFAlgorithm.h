@@ -1,24 +1,9 @@
-/*
- *    GeoTools - The Open Source Java GIS Toolkit
- *    http://geotools.org
- *
- *    (C) 2015, Open Source Geospatial Foundation (OSGeo)
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License as published by the Free Software Foundation;
- *    version 2.1 of the License.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- */
-
 /**
+ * @author Hyung-Gyu Ryoo (hyungyu.ryoo@gmail.com)
  * @author Donguk Seo
  *
  */
+#pragma once
 
 #include <SFCGAL/algorithm/area.h>
 #include <SFCGAL/algorithm/convexHull.h>
@@ -78,7 +63,7 @@ SFGeometry* getSFGeometry( SFCGAL::Geometry* p ) {
 		return new SFMultiPolygon( p->as<SFCGAL::MultiPolygon>() );
 	} else if ( p->geometryTypeId() == SFCGAL::TYPE_MULTISOLID) {
 		return new SFMultiSolid( p->as<SFCGAL::MultiSolid>() );
-	}	
+	}
 	return new SFGeometry();
 }
 
@@ -140,7 +125,7 @@ double distance3D( const SFGeometry& gA, const SFGeometry& gB) {
 
 SFGeometry& extrude( const SFGeometry& g, double dx, double dy, double dz) {
 	std::auto_ptr<SFCGAL::Geometry> p = SFCGAL::algorithm::extrude(*(g.get_data()), dx, dy, dz);
-	
+
 	SFGeometry *geometry = new SFGeometry(p.release());
 
 	return *geometry;
@@ -189,7 +174,7 @@ SFMultiPolygon& offset( const SFGeometry& g, const double r) {
 
 	SFMultiPolygon *multiPolygon = new SFMultiPolygon(p.release());
 
-	return *multiPolygon;	
+	return *multiPolygon;
 }
 
 bool hasPlane3D( const SFPolygon& polygon ) {

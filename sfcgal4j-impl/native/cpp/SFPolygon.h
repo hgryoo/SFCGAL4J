@@ -1,27 +1,9 @@
-/*
- *    GeoTools - The Open Source Java GIS Toolkit
- *    http://geotools.org
- *
- *    (C) 2015, Open Source Geospatial Foundation (OSGeo)
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License as published by the Free Software Foundation;
- *    version 2.1 of the License.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- */
-
 /**
+ * @author Hyung-Gyu Ryoo (hyungyu.ryoo@gmail.com)
  * @author Donguk Seo
  *
  */
-
-#ifndef JAVACPP_SFCGAL_Polygon_H
-#define JAVACPP_SFCGAL_Polygon_H
+#pragma once
 
 #include <SFCGAL/Polygon.h>
 #include "SFGeometry.h"
@@ -30,7 +12,7 @@
 #include "SFTriangle.h"
 
 class SFPolygon : public SFSurface {
-public:	
+public:
 	SFPolygon() : SFSurface(new SFCGAL::Polygon()) { }
 	SFPolygon(const std::vector< void * > & rings) {
 		std::vector<SFCGAL::LineString>* cpp_base_rings = new std::vector<SFCGAL::LineString>();
@@ -40,7 +22,7 @@ public:
 		}
 
 		data = new SFCGAL::Polygon(cpp_base_rings->at(0));
-		
+
 		SFCGAL::Polygon* poly = dynamic_cast<SFCGAL::Polygon*>(data);
 		if(cpp_base_rings->size() > 1) {
 			for(size_t i=1; i<cpp_base_rings->size(); i++)
@@ -65,30 +47,30 @@ public:
 
 	SFPolygon& operator=(const SFPolygon& other) {
 		data = other.data;
-		
+
 		return *this;
 	}
-	
+
 	~SFPolygon() { }
-	
-	
+
+
 	//--SFCGAL::Geometry
 	SFPolygon* clone() const {
 		return new SFPolygon(*this);
 	}
-	
+
 	std::string geometryType() const {
 		return data->geometryType();
-	}	
-	
+	}
+
 	int geometryTypeId() const {
 		return data->geometryTypeId();
 	}
-	
+
 	int dimension() const {
 		return data->dimension();
 	}
-	
+
 	int coordinateDimension() const {
 		return data->coordinateDimension();
 	}
@@ -100,7 +82,7 @@ public:
 	bool is3D() const {
 		return data->is3D();
 	}
-	
+
 	bool isMeasured() const {
 		return data->isMeasured();
 	}
@@ -110,12 +92,12 @@ public:
 	bool isCounterClockWiseOriented() {
 		return ((SFCGAL::Polygon *)data)->isCounterClockWiseOriented();
 	}
-	
+
 	void reverse() {
 		((SFCGAL::Polygon *)data)->reverse();
 	}
 
-	
+
 	SFLineString& exteriorRing() const { // not used
 		return *(new SFLineString(((SFCGAL::Polygon *)data)->exteriorRing()));
 	}
@@ -128,7 +110,7 @@ public:
 		((SFCGAL::Polygon *)data)->setExteriorRing(*(SFCGAL::LineString *)(ring.get_data()));
 	}
 	//void setExteriorRing(const SFCGAL::LineString& ring);
-	
+
 	bool hasInteriorRings() const {
 		return ((SFCGAL::Polygon *)data)->hasInteriorRings();
 	}
@@ -152,12 +134,12 @@ public:
 	const SFLineString& ringN( size_t const & n) const {
 		return *(new SFLineString(((SFCGAL::Polygon *)data)->ringN(n)));
 	}
-	
+
 	SFLineString& ringN( size_t const & n) {
 		return *(new SFLineString(((SFCGAL::Polygon *)data)->ringN(n)));
 	}
-	
-	
+
+
 	void addInteriorRing(const SFLineString& ls){
 		((SFCGAL::Polygon *)data)->addInteriorRing(*(SFCGAL::LineString *)(ls.get_data()));
 	}
@@ -175,7 +157,7 @@ public:
 		((SFCGAL::Polygon *)data)->addRing(*(SFCGAL::LineString *)(ls->get_data()));
 	}
 
-	
+
 	// iterator begin() ;
 	// const_iterator begin();
 	// iterator end() ;
@@ -187,5 +169,3 @@ public:
 	//void accept(GeometryVisitor& visitor);
 	//void accept(ConstGeometryVisitor& visitor) const ;
 };
-
-#endif
