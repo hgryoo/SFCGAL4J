@@ -182,7 +182,6 @@
 							</includes>
 						</configuration>
 					</execution>
-				<executions>
 					<execution>
 						<id>javacpp.cppbuild.install</id>
 						<phase>generate-sources</phase>
