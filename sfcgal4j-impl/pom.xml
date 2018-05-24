@@ -20,12 +20,6 @@
 	</licenses>
 
 	<properties>
-		<maven.test.skip>false</maven.test.skip>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<javacpp.cppbuild.skip>false</javacpp.cppbuild.skip> <!-- To skip execution of cppbuild.sh: -Djavacpp.cppbuild.skip=true -->
-		<javacpp.parser.skip>false</javacpp.parser.skip>     <!-- To skip header file parsing phase: -Djavacpp.parser.skip=true -->
-		<javacpp.compiler.skip>false</javacpp.compiler.skip> <!-- To skip native compilation phase: -Djavacpp.compiler.skip=true -->
-		<javacpp.moduleId>sfcgal4j</javacpp.moduleId>
 		<test.maxHeapSize>512M</test.maxHeapSize>
 		<jvm.opts>-XX:MaxMetaspaceSize=256M</jvm.opts>
 	</properties>
@@ -59,7 +53,6 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>javacpp</artifactId>
-            <version>1.4.1</version>
         </dependency>
 	</dependencies>
 
@@ -119,6 +112,7 @@
 						</goals>
 						<configuration>
 							<skip>${javacpp.parser.skip}</skip>
+							<outputDirectory>${project.build.sourceDirectory}</outputDirectory>
 							<classOrPackageName>edu.pnu.stemlab.sfcgal4j.*</classOrPackageName>
 						</configuration>
 					</execution>
@@ -137,116 +131,94 @@
 					</execution>
 				</executions>
 			</plugin>
-
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>2.7</version>
-                <executions>
-                    <execution>
-                        <id>javacpp.parser</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>resources</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>copy-resources</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.outputDirectory}/edu/pnu/stemlab/sfcgal4j/${javacpp.platform}</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${basedir}/cppbuild/${javacpp.platform}/lib</directory>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>3.0.0</version>
-				<configuration>
-					<descriptors>
-						<descriptor>src/main/assembly/bin.xml</descriptor>
-						<descriptor>src/main/assembly/src.xml</descriptor>
-					</descriptors>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
 			<plugin>
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>3.0.2</version>
-				 <executions>
+				<executions>
 					<execution>
-					    <id>default-jar</id>
-					    <phase>package</phase>
-					    <goals>
-					      <goal>jar</goal>
-					    </goals>
-                        <configuration>
-                        <archive>
-                            <manifestEntries>
-                                <Class-Path>.</Class-Path>
-                                <Name>edu/pnu/stemlab/sfcgal4j</Name>
-                                <Implementation-Title>${project.name}</Implementation-Title>
-                                <Implementation-Vendor>STEMLab</Implementation-Vendor>
-                                <Implementation-Version>${project.version}</Implementation-Version>
-                                <Specification-Title>${project.name}</Specification-Title>
-                                <Specification-Vendor>STEMLab</Specification-Vendor>
-                                <Specification-Version>${project.version}</Specification-Version>
-                            </manifestEntries>
-                        </archive>
-                        <includes>
-                            <include>edu/pnu/stemlab/sfcgal4j/*</include>
-                        </includes>
-                        <excludes>
-                            <exclude>edu/pnu/stemlab/sfcgal4j/linux-*/</exclude>
-                            <exclude>edu/pnu/stemlab/sfcgal4j/macosx-*/</exclude>
-                            <exclude>edu/pnu/stemlab/sfcgal4j/windows-*/</exclude>
-                            <exclude>edu/pnu/stemlab/sfcgal4j/${javacpp.platform}/</exclude>
-                        </excludes>
-                        </configuration>
+						<id>default-jar</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<configuration>
+							<archive>
+								<manifestEntries>
+									<Class-Path>.</Class-Path>
+									<Name>edu/pnu/stemlab/sfcgal4j</Name>
+									<Implementation-Title>${project.name}</Implementation-Title>
+									<Implementation-Vendor>STEMLab</Implementation-Vendor>
+									<Implementation-Version>${project.version}</Implementation-Version>
+									<Specification-Title>${project.name}</Specification-Title>
+									<Specification-Vendor>STEMLab</Specification-Vendor>
+									<Specification-Version>${project.version}</Specification-Version>
+								</manifestEntries>
+							</archive>
+							<includes>
+								<include>edu/pnu/stemlab/sfcgal4j/*</include>
+							</includes>
+							<excludes>
+								<exclude>edu/pnu/stemlab/sfcgal4j/linux-*/</exclude>
+								<exclude>edu/pnu/stemlab/sfcgal4j/macosx-*/</exclude>
+								<exclude>edu/pnu/stemlab/sfcgal4j/windows-*/</exclude>
+								<exclude>edu/pnu/stemlab/sfcgal4j/${javacpp.platform}/</exclude>
+							</excludes>
+						</configuration>
 					</execution>
 					<execution>
-					    <id>${javacpp.platform}</id>
-					    <phase>package</phase>
-					    <goals>
-					      <goal>jar</goal>
-					    </goals>
-					    <configuration>
-					      <classifier>${javacpp.platform}</classifier>
-					      <skipIfEmpty>true</skipIfEmpty>
-					      <includes>
-                              <include>edu/pnu/stemlab/sfcgal4j/linux-*/</include>
-                              <include>${javacpp.platform.library.path}/</include>
-                              <include>${basedir}/cppbuild/${javacpp.platform}/lib</include>
-						      <include>${basedir}/edu/pnu/stemlab/sfcgal4j/${javacpp.platform}/</include>
-					      </includes>
-					    </configuration>
-					  </execution>
+						<id>${javacpp.platform}</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<configuration>
+							<classifier>${javacpp.platform}</classifier>
+							<skipIfEmpty>true</skipIfEmpty>
+							<includes>
+								<include>edu/pnu/stemlab/sfcgal4j/linux-*/</include>
+								<include>${javacpp.platform.library.path}/</include>
+								<include>${basedir}/cppbuild/${javacpp.platform}/lib</include>
+								<include>${basedir}/edu/pnu/stemlab/sfcgal4j/${javacpp.platform}/</include>
+							</includes>
+						</configuration>
+					</execution>
+				<executions>
+					<execution>
+						<id>javacpp.cppbuild.install</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>build</goal>
+						</goals>
+						<configuration>
+							<skip>${javacpp.cppbuild.skip}</skip>
+							<buildCommand>
+								<program>bash</program>
+								<argument>${project.basedir}/cppbuild.sh</argument>
+								<argument>install</argument>
+							</buildCommand>
+							<workingDirectory>${project.basedir}</workingDirectory>
+							<classOrPackageName>edu.pnu.stemlab.sfcgal4j.*</classOrPackageName>
+						</configuration>
+					</execution>
+					<execution>
+						<id>javacpp.cppbuild.clean</id>
+						<phase>clean</phase>
+						<goals>
+							<goal>build</goal>
+						</goals>
+						<configuration>
+							<skip>${javacpp.cppbuild.skip}</skip>
+							<buildCommand>
+								<program>bash</program>
+								<argument>${project.basedir}/cppbuild.sh</argument>
+								<argument>clean</argument>
+							</buildCommand>
+							<workingDirectory>${project.basedir}</workingDirectory>
+							<classOrPackageName>edu.pnu.stemlab.sfcgal4j.*</classOrPackageName>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
-
-            <plugin>
-                <artifactId>maven-install-plugin</artifactId>
-                <version>2.5.2</version>
-                <configuration>
-                    <createChecksum>true</createChecksum>
-                </configuration>
-            </plugin>
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
             </plugin>
