@@ -129,7 +129,7 @@ case $OPERATION in
 
 				# building cgal
 				cd CGAL
-				cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_SHARED_LIBS=TRUE
+				cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH
 				make
 				make install
 				cd ../

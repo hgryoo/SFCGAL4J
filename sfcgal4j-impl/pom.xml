@@ -112,7 +112,6 @@
 						</goals>
 						<configuration>
 							<skip>${javacpp.parser.skip}</skip>
-							<outputDirectory>${project.build.sourceDirectory}</outputDirectory>
 							<classOrPackageName>edu.pnu.stemlab.sfcgal4j.*</classOrPackageName>
 						</configuration>
 					</execution>
@@ -127,6 +126,40 @@
 							<classOrPackageName>edu.pnu.stemlab.sfcgal4j.*</classOrPackageName>
 							<copyLibs>true</copyLibs>
 							<copyResources>true</copyResources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>javacpp.cppbuild.install</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>build</goal>
+						</goals>
+						<configuration>
+							<skip>${javacpp.cppbuild.skip}</skip>
+							<buildCommand>
+								<program>bash</program>
+								<argument>${project.basedir}/cppbuild.sh</argument>
+								<argument>install</argument>
+							</buildCommand>
+							<workingDirectory>${project.basedir}</workingDirectory>
+							<classOrPackageName>edu.pnu.stemlab.sfcgal4j.*</classOrPackageName>
+						</configuration>
+					</execution>
+					<execution>
+						<id>javacpp.cppbuild.clean</id>
+						<phase>clean</phase>
+						<goals>
+							<goal>build</goal>
+						</goals>
+						<configuration>
+							<skip>${javacpp.cppbuild.skip}</skip>
+							<buildCommand>
+								<program>bash</program>
+								<argument>${project.basedir}/cppbuild.sh</argument>
+								<argument>clean</argument>
+							</buildCommand>
+							<workingDirectory>${project.basedir}</workingDirectory>
+							<classOrPackageName>edu.pnu.stemlab.sfcgal4j.*</classOrPackageName>
 						</configuration>
 					</execution>
 				</executions>
@@ -182,45 +215,8 @@
 							</includes>
 						</configuration>
 					</execution>
-					<execution>
-						<id>javacpp.cppbuild.install</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>build</goal>
-						</goals>
-						<configuration>
-							<skip>${javacpp.cppbuild.skip}</skip>
-							<buildCommand>
-								<program>bash</program>
-								<argument>${project.basedir}/cppbuild.sh</argument>
-								<argument>install</argument>
-							</buildCommand>
-							<workingDirectory>${project.basedir}</workingDirectory>
-							<classOrPackageName>edu.pnu.stemlab.sfcgal4j.*</classOrPackageName>
-						</configuration>
-					</execution>
-					<execution>
-						<id>javacpp.cppbuild.clean</id>
-						<phase>clean</phase>
-						<goals>
-							<goal>build</goal>
-						</goals>
-						<configuration>
-							<skip>${javacpp.cppbuild.skip}</skip>
-							<buildCommand>
-								<program>bash</program>
-								<argument>${project.basedir}/cppbuild.sh</argument>
-								<argument>clean</argument>
-							</buildCommand>
-							<workingDirectory>${project.basedir}</workingDirectory>
-							<classOrPackageName>edu.pnu.stemlab.sfcgal4j.*</classOrPackageName>
-						</configuration>
-					</execution>
 				</executions>
 			</plugin>
-            <plugin>
-                <artifactId>maven-jar-plugin</artifactId>
-            </plugin>
             <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
             </plugin>
