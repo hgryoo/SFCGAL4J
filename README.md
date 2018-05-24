@@ -10,13 +10,12 @@ Java wrapper for [Simple Feature CGAL (SFCGAL)](http://sfcgal.org) which is a C+
   * GNU/Linux
 
 ## Prerequisites
+ * JDK 8 or newer
  * CMake
- * Boost
- * CGAL
  * GMP
  * MPFR
- * SFCGAL
- 
+ * Boost, CGAL, SFCGAL
+  
 ## License of third party libraries
  * SFCGAL is distributed under the terms of the [LGPL](http://www.gnu.org/licenses/old-licenses/lgpl-2.0.html)(v2+).  
  * Starting from release 4.0. CGAL is available under the [GPL](http://www.gnu.org/copyleft/gpl.html)(v3+)/[LGPL](http://www.gnu.org/copyleft/lesser.html)(v3+).  
@@ -29,6 +28,16 @@ Boost, CGAL and SFCGAL libraries will be installed automatically.
 If you don't want to install it, set javacpp.cppbuild.skip=True
 ```
 mvn clean install
+```
+
+## Usage
+After building this project, add following code
+```$xml
+  <dependency>
+    <groupId>edu.pnu.stemlab</groupId>
+    <artifactId>sfcgal4j-platform</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </dependency>
 ```
 
 # Note
