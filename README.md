@@ -23,19 +23,17 @@ Java wrapper for [Simple Feature CGAL (SFCGAL)](http://sfcgal.org) which is a C+
  * JavaCPP is available under Apache License(v2.0)/[GPL](http://www.gnu.org/copyleft/gpl.html)(v2+) with "Classpath" exception. 
  * GeoTools licensed under the [LGPL](http://www.gnu.org/licenses/old-licenses/lgpl-2.0.html)(v2+).
 
-## Installation (GNU/Linux)
-You can build and install boost, CGAL and SFCGAL by installation script automatically.
-```
-./cppbuild.sh install
-```
-
 ## Building
-This project uses Apache Maven. To build this project run maven from the root of the repository.  
+This project uses Apache Maven. To build this project run maven from the root of the repository.
+Boost, CGAL and SFCGAL libraries will be installed automatically.
+If you don't want to install it, set javacpp.cppbuild.skip=True
 ```
 mvn clean install
 ```
 
+# Note
+This project is based on [SFCGAL](sfcgal.org) and [JavaCPP](https://github.com/bytedeco/javacpp)
+
 ## Authors
  * Hyung-Gyu Ryoo / Pusan National University (hgryoo@pnu.edu)  
  * Donguk Seo / Pusan National University (donguk.seo@pnu.edu)
-
