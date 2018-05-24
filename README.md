@@ -20,7 +20,6 @@ Java wrapper for [Simple Feature CGAL (SFCGAL)](http://sfcgal.org) which is a C+
  * SFCGAL is distributed under the terms of the [LGPL](http://www.gnu.org/licenses/old-licenses/lgpl-2.0.html)(v2+).  
  * Starting from release 4.0. CGAL is available under the [GPL](http://www.gnu.org/copyleft/gpl.html)(v3+)/[LGPL](http://www.gnu.org/copyleft/lesser.html)(v3+).  
  * JavaCPP is available under Apache License(v2.0)/[GPL](http://www.gnu.org/copyleft/gpl.html)(v2+) with "Classpath" exception. 
- * GeoTools licensed under the [LGPL](http://www.gnu.org/licenses/old-licenses/lgpl-2.0.html)(v2+).
 
 ## Building
 This project uses Apache Maven. To build this project run maven from the root of the repository.
