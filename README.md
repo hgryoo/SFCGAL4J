@@ -30,7 +30,7 @@ mvn clean install
 ```
 
 ## Usage
-After building this project, add following code
+After building this project, insert following a dependency code to pom.xml in your maven project.
 ```$xml
   <dependency>
     <groupId>edu.pnu.stemlab</groupId>
