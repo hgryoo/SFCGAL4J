@@ -220,6 +220,7 @@ double volume( const SFGeometry& g ){
 bool isValid( const SFGeometry& g , const int tolerance) {
 	if (typeid(g) == typeid(SFTriangulatedSurface) || typeid(g) == typeid(SFPolyhedralSurface)) {
 		//TODO
+		return true;
 	} else {
 		return static_cast<bool>(SFCGAL::algorithm::isValid(*(g.get_data()), 0));
 	}

@@ -17,5 +17,5 @@ public class SFOSGSupport {
         Loader.load();
     }
 
-    public static native void writeOSGFile(@ByRef SFGeometry g, @StdString BytePointer filePath);
+    public static native void writeOSGFile(@ByRef SFGeometry g, @StdString String filePath);
 }

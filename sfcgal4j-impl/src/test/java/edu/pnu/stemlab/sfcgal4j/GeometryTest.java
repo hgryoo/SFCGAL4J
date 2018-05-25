@@ -5,10 +5,11 @@ import java.util.ArrayList;
 import junit.framework.TestCase;
 
 /**
+ * @author Hyung-Gyu Ryoo (hyunggyu.ryoo@gmail.com)
  * @author Donguk Seo
  *
  */
-public class SFWrapperTest extends TestCase {
+public class GeometryTest extends TestCase {
 
         public void testMain() {
                 _testSFCoordiante();
