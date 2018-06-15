@@ -114,7 +114,7 @@ case $OPERATION in
 				tar -xzf ../downloads/SFCGAL.tar.gz -C SFCGAL --strip-components 1
 
 				cd boost
-                ./bootstrap.sh --prefix=$INSTALL_PATH
+                ./bootstrap.sh --prefix=$INSTALL_PATH "--with-libraries=filesystem,system,thread,date_time,serialization,timer"
 
                 ./b2 -j8
                 ./b2 -d0 install "--prefix=$INSTALL_PATH" link=shared "address-model=64" "toolset=gcc"

@@ -15,6 +15,7 @@ Java wrapper for [Simple Feature CGAL (SFCGAL)](http://sfcgal.org) which is a C+
  * GMP
  * MPFR
  * Boost, CGAL, SFCGAL
+ * (Optional) OpenSceneGraph
   
 ## License of third party libraries
  * SFCGAL is distributed under the terms of the [LGPL](http://www.gnu.org/licenses/old-licenses/lgpl-2.0.html)(v2+).  
